@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Stay organized with our user-friendly Calendar featuring events, reminders, and a customizable interface. Built with HTML, CSS, and JavaScript. Start scheduling today!"
+    />
+    <meta
+      name="keywords"
+      content="calendar, events, reminders, javascript, html, css, open source coding"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    
+    <link rel="stylesheet" href="css/style.css" />
+    <title>Calendar with Events</title>
+  </head>
+  
+  <body>
+      <form action="CallingServlet1" method="post">
+  
+    <div class="Head-d">
+      <h1>Time Sheet for the month of Month and Year</h1>
+    </div>
+    <div class="userdetails">
+      <table>
+        <tr>
+          <th>Consultant or Employee name:</th>
+          <td><input type="text" id="name" name="ename"></td>
+        </tr>
+        <tr>
+          <th>Employee number:</th>
+          <td><input type="text" id="employeeNumber" name="eid"></td>
+        </tr>
+        <tr>
+          <th>Client:</th>
+          <td><input type="text" id="client" name="client"></td>
+        </tr>
+        <tr>
+          <th>Working hours:</th>
+          <td><input type="text" id="workingHours" name="wh"></td>
+        </tr>
+        <tr>
+          <th>Weekly Holidays:</th>
+          <td>Saturday and Sunday</td>
+        </tr>
+        <tr>
+          <th>Location:</th>
+          <td><input type="text" id="location" name="loc"></td>
+        </tr>
+      </table>
+      <input type="submit" value="submit">
+    </div>
+    <div class="container">
+        <div class="calendar">
+            <div class="month">
+              <i class="fas fa-angle-left prev"></i>
+              <div class="date"></div>
+              <i class="fas fa-angle-right next"></i>
+            </div>
+            <div class="weekdays">
+              <div>Sun</div>
+              <div>Mon</div>
+              <div>Tue</div>
+              <div>Wed</div>
+              <div>Thu</div>
+              <div>Fri</div>
+              <div>Sat</div>
+            </div>
+            <div class="days">
+                <div class="number-input-wrapper">
+                    <input type="number" class="number-input" placeholder="Enter number" />
+                    <button class="submit-number-btn">Submit</button>
+                  </div>
+                <!--we get js code here-->
+            </div>
+            <div class="goto-today">
+              <div class="goto">
+                <input type="text" placeholder="mm/yyyy" class="date-input" />
+                <button class="goto-btn">Go</button>
+              </div>
+              <button class="today-btn">Today</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="tasks">
+        <div class="today-task">
+          <div class="today-day">
+            <div class="task-day">Wednesday</div>
+            <div class="task-date">12th december 2022</div>
+          </div>
+          <div class="task">
+            <div class="title"></div>
+            <h4 class="task-title">Task 1</h3>
+              <div class="input-container">
+                <input type="text" id="task-input" placeholder="Add a new task">
+                <button id="add-task-btn">+</button>
+            </div>
+            <ul id="task-list">
+                <!-- Tasks will be added here dynamically -->
+            </ul>
+        </div>
+        <div class="today-task">
+          <div class="today-day">
+            <div class="task-day">Wednesday</div>
+            <div class="task-date">12th december 2022</div>
+          </div>
+          <div class="task">
+            <div class="title"></div>
+            <h4 class="task-title">Task 1</h3>
+              <div class="input-container">
+                <input type="text" id="task-input" placeholder="Add a new task">
+                <button id="add-task-btn">+</button>
+            </div>
+            <ul id="task-list">
+                <!-- Tasks will be added here dynamically -->
+            </ul>
+        </div>
+        <div class="today-task">
+          <div class="today-day">
+            <div class="task-day">Wednesday</div>
+            <div class="task-date">12th december 2022</div>
+          </div>
+          <div class="task">
+            <div class="title"></div>
+            <h4 class="task-title">Task 1</h3>
+              <div class="input-container">
+                <input type="text" id="task-input" placeholder="Add a new task">
+                <button id="add-task-btn">+</button>
+            </div>
+            <ul id="task-list">
+                <!-- Tasks will be added here dynamically -->
+            </ul>
+        </div>
+
+        </div>
+    </div>
+    
+
+    <script src="js/script.js"></script>
+    </form>
+  </body>
+
+</html>
