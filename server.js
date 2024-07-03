@@ -50,6 +50,54 @@ app.get('/ud/:id',(req,res)=>{
 });
 
 
+
+// Register endpoint
+app.post('/register', (req, res) => {
+  const { eid, email, employeeName, client, location } = req.body;
+
+  // Check if eid or email already exists
+  const checkSql = 'SELECT * FROM ud WHERE eid = ? OR username = ?';
+  db.query(checkSql, [eid, email], (checkErr, checkResult) => {
+      if (checkErr) {
+          console.error('Database error:', checkErr);
+          return res.status(500).json({ success: false, message: 'Server error' });
+      }
+
+      const errors = [];
+      if (checkResult.length > 0) {
+          const existingEid = checkResult.some(row => row.eid === eid);
+          const existingEmail = checkResult.some(row => row.username === email);
+
+          if (existingEid) {
+              errors.push({ field: 'eid', message: 'EID already registered' });
+          }
+          if (existingEmail) {
+              errors.push({ field: 'email', message: 'Email already registered' });
+          }
+
+          if (errors.length > 0) {
+              return res.json({ success: false, errors: errors });
+          }
+      }
+
+      // Proceed with insertion if not found
+      const insertSql = 'INSERT INTO ud (eid, username, ename, client, loc, wh) VALUES (?, ?, ?, ?, ?, 9)';
+      db.query(insertSql, [eid, email, employeeName, client, location], (insertErr, insertResult) => {
+          if (insertErr) {
+            console.error('Database error:', insertErr);
+            if (insertErr.code === 'ER_DUP_ENTRY') {
+                return res.status(400).json({ success: false, message: "Duplicate entry for Employee ID." });
+            } else if (insertErr.code === 'ER_DATA_TOO_LONG') {
+                return res.status(400).json({ success: false, message: "Data too long for one of the fields." });
+            } else {
+                return res.status(500).json({ success: false, message: 'Server error' });
+            }
+        }
+        res.json({ success: true, message: 'Registration successful' });
+      });
+  });
+});
+
 // Route for fetching tasks based on route parameters
 
 app.get('/events/:eid/:day/:month/:year', (req, res) => {
