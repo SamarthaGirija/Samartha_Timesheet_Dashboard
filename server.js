@@ -50,8 +50,6 @@ app.get('/ud/:id',(req,res)=>{
 });
 
 
-
-// Register endpoint
 app.post('/register', (req, res) => {
   const { eid, email, employeeName, client, location } = req.body;
 
@@ -76,7 +74,7 @@ app.post('/register', (req, res) => {
           }
 
           if (errors.length > 0) {
-              return res.json({ success: false, errors: errors });
+              return res.status(400).json({ success: false, errors: errors });
           }
       }
 
@@ -84,19 +82,20 @@ app.post('/register', (req, res) => {
       const insertSql = 'INSERT INTO ud (eid, username, ename, client, loc, wh) VALUES (?, ?, ?, ?, ?, 9)';
       db.query(insertSql, [eid, email, employeeName, client, location], (insertErr, insertResult) => {
           if (insertErr) {
-            console.error('Database error:', insertErr);
-            if (insertErr.code === 'ER_DUP_ENTRY') {
-                return res.status(400).json({ success: false, message: "Duplicate entry for Employee ID." });
-            } else if (insertErr.code === 'ER_DATA_TOO_LONG') {
-                return res.status(400).json({ success: false, message: "Data too long for one of the fields." });
-            } else {
-                return res.status(500).json({ success: false, message: 'Server error' });
-            }
-        }
-        res.json({ success: true, message: 'Registration successful' });
+              console.error('Database error:', insertErr);
+              let message = 'Server error';
+              if (insertErr.code === 'ER_DUP_ENTRY') {
+                  message = 'Duplicate entry for Employee ID.';
+              } else if (insertErr.code === 'ER_DATA_TOO_LONG') {
+                  message = 'Data too long for one of the fields.';
+              }
+              return res.status(400).json({ success: false, message });
+          }
+          res.status(201).json({ success: true, message: 'Registration successful' });
       });
   });
 });
+
 
 // Route for fetching tasks based on route parameters
 
