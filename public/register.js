@@ -1,26 +1,25 @@
-document.getElementById('registerForm').addEventListener('submit', function(event) {
-    const emailInput = document.getElementById('email').value;
-    if (!emailInput.endsWith('@samarthainfo.com')) {
-        alert('Please enter an email ends with domain samarthainfo.com.');
-        event.preventDefault(); // Prevent form submission
-    }
-});
-
-
-
-
 document.addEventListener("DOMContentLoaded", () => {
     const eidInput = document.getElementById("eid");
     eidInput.addEventListener("keypress", preventSpecialChars);
 
-    // Handle form submission
-    document.getElementById('registerForm').addEventListener('submit', async function(event) {
+    const registerForm = document.getElementById('registerForm');
+
+    registerForm.addEventListener('submit', async function(event) {
         event.preventDefault(); // Prevent default form submission
 
+        // Validate email domain
+        const emailInput = document.getElementById('email').value;
+        if (!emailInput.endsWith('@samarthainfo.com')) {
+            alert('Please enter an email that ends with domain samarthainfo.com.');
+            return;
+        }
+
+        // Validate EID and Employee Name
         if (!validateEid() || !validateEmployeeName()) {
             return; // Prevent form submission if validation fails
         }
 
+        // Handle form submission
         const formData = new FormData(event.target);
         const data = Object.fromEntries(formData.entries());
 
@@ -33,27 +32,28 @@ document.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify(data)
             });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok.');
-            }
-
             const result = await response.json();
-            console.log(result);
 
             // Clear previous error messages
             document.getElementById('eid-error').textContent = '';
             document.getElementById('email-error').textContent = '';
+            document.getElementById('name-error').textContent = '';
+            const messageContainer = document.getElementById("form-message");
 
-            if (!result.success) {
+            if (!response.ok || !result.success) {
                 if (result.errors) {
                     result.errors.forEach(error => {
                         if (error.field === 'eid') {
                             document.getElementById('eid-error').textContent = error.message;
                         } else if (error.field === 'email') {
                             document.getElementById('email-error').textContent = error.message;
+                        } else if (error.field === 'employeeName') {
+                            document.getElementById('name-error').textContent = error.message;
                         }
                     });
                 }
+                messageContainer.textContent = result.message;
+                messageContainer.style.color = 'red';
             } else {
                 // Registration successful, redirect or show success message
                 alert('Registration successful! Redirecting to login...');
@@ -65,9 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
-
-
-
 
 function validateEmployeeName() {
     const employeeName = document.getElementById("employeeName").value;
@@ -81,42 +78,6 @@ function validateEmployeeName() {
         return true;
     }
 }
-
-
-
-async function handleSubmit(event) {
-    event.preventDefault();
-
-    const form = document.getElementById("registerForm");
-    const formData = new FormData(form);
-    const data = new URLSearchParams(formData);
-
-    try {
-        const response = await fetch('/register', {
-            method: 'POST',
-            body: data
-        });
-
-        const result = await response.json();
-
-        const messageContainer = document.getElementById("form-message");
-        if (result.success) {
-            messageContainer.textContent = result.message;
-            messageContainer.style.color = 'green';
-        } else {
-            messageContainer.textContent = result.message;
-            messageContainer.style.color = 'red';
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("registerForm").addEventListener("submit", handleSubmit);
-});
-
-
 
 function validateEid() {
     const eid = document.getElementById("eid").value;
@@ -141,4 +102,3 @@ function preventSpecialChars(event) {
         event.preventDefault();
     }
 }
-
